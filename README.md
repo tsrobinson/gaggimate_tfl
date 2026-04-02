@@ -25,14 +25,7 @@ A fork of [GaggiMate](https://github.com/jniebuhr/gaggimate) that adds a **Trans
 
 This fork only changes the **display firmware**. Your controller firmware stays on the official GaggiMate release.
 
-### Option 1: Pre-built binary (easiest)
-
-1. Go to the [Releases](https://github.com/tsrobinson/gaggimate_tfl/releases) page (or the latest [Actions build](https://github.com/tsrobinson/gaggimate_tfl/actions)) and download the display firmware `.bin` file.
-2. Open the GaggiMate web UI (connect to your display's IP in a browser).
-3. Navigate to **Settings > Update** and upload the `.bin` file.
-4. The display will reboot with the TfL edition firmware.
-
-### Option 2: Build from source
+### Flashing over USB
 
 Requires [PlatformIO](https://platformio.org/) and [Node.js](https://nodejs.org/).
 
@@ -45,8 +38,6 @@ pio run -e display -t uploadfs    # flash web UI filesystem
 ```
 
 The `build_spiffs.sh` script builds the web UI and packages it into the SPIFFS filesystem data directory. Both the firmware and the filesystem need to be flashed separately — `upload` flashes the firmware, `uploadfs` flashes the web UI.
-
-You can also build without flashing (`pio run -e display`) and upload the firmware binary (`.pio/build/display/firmware.bin`) via the web UI as in Option 1. Note that uploading via the web UI only updates the firmware — to update the web UI itself you need to flash the filesystem over USB with `uploadfs`.
 
 ## Configuration
 
