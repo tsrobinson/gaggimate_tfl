@@ -11,7 +11,7 @@
 
 A fork of [GaggiMate](https://github.com/jniebuhr/gaggimate) that adds a **Transport for London screensaver** to the standby screen. While your machine is idle, the display shows live Tube line statuses and bus arrival times pulled from the TfL API.
 
-<img src="display.jpeg" alt="TfL screensaver on the GaggiMate display" width="420" />
+<img src="docs/assets/display-mockup.svg" alt="TfL screensaver on the GaggiMate display" width="420" />
 
 > All standard GaggiMate features (temperature control, brew timer, steam mode, profiles, etc.) work exactly as normal. The TfL screensaver only activates on the standby screen when enabled.
 
@@ -34,21 +34,19 @@ This fork only changes the **display firmware**. Your controller firmware stays 
 
 ### Option 2: Build from source
 
-Requires [PlatformIO](https://platformio.org/).
+Requires [PlatformIO](https://platformio.org/) and [Node.js](https://nodejs.org/).
 
 ```bash
 git clone https://github.com/tsrobinson/gaggimate_tfl.git
 cd gaggimate_tfl
-pio run -e display
+./scripts/build_spiffs.sh
+pio run -e display -t upload      # flash firmware
+pio run -e display -t uploadfs    # flash web UI filesystem
 ```
 
-To flash directly over USB:
+The `build_spiffs.sh` script builds the web UI and packages it into the SPIFFS filesystem data directory. Both the firmware and the filesystem need to be flashed separately — `upload` flashes the firmware, `uploadfs` flashes the web UI.
 
-```bash
-pio run -e display -t upload
-```
-
-Or upload the built binary (`/.pio/build/display/firmware.bin`) via the web UI as in Option 1.
+You can also build without flashing (`pio run -e display`) and upload the firmware binary (`.pio/build/display/firmware.bin`) via the web UI as in Option 1. Note that uploading via the web UI only updates the firmware — to update the web UI itself you need to flash the filesystem over USB with `uploadfs`.
 
 ## Configuration
 

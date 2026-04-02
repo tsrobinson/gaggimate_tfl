@@ -516,8 +516,7 @@ void WebUIPlugin::handleSettings(AsyncWebServerRequest *request) const {
                 settings->setStandbyBrightness(request->arg("standbyBrightness").toInt());
             if (request->hasArg("standbyBrightnessTimeout"))
                 settings->setStandbyBrightnessTimeout(request->arg("standbyBrightnessTimeout").toInt() * 1000);
-            if (request->hasArg("tflEnabled"))
-                settings->setTflScreensaverEnabled(request->arg("tflEnabled").toInt() != 0);
+            settings->setTflScreensaverEnabled(request->hasArg("tflEnabled"));
             if (request->hasArg("tflAppId"))
                 settings->setTflAppId(request->arg("tflAppId"));
             if (request->hasArg("tflAppKey"))

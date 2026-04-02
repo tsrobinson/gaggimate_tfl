@@ -37,7 +37,6 @@ jobs:
     - name: Add version
       run: |
         mkdir -p out
-        git tag -d nightly
         git describe --tags --dirty > out/version.txt
     - name: Build Web
       run: ./scripts/build_spiffs.sh

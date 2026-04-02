@@ -7,7 +7,6 @@ inputs:
     type: choice
     options:
       - stable
-      - nightly
   version:
     description: Release version (e.g. 1.2.3)
     required: false

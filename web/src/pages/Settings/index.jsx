@@ -127,6 +127,9 @@ export function Settings() {
       if (key === 'clock24hFormat') {
         value = !formData.clock24hFormat;
       }
+      if (key === 'tflEnabled') {
+        value = !formData.tflEnabled;
+      }
       if (key === 'autowakeupEnabled') {
         value = !formData.autowakeupEnabled;
       }
@@ -845,6 +848,103 @@ export function Settings() {
                 <option value={0}>Dark Theme</option>
                 <option value={1}>Light Theme</option>
               </select>
+            </div>
+          </Card>
+
+          {/* TfL Screensaver */}
+          <Card sm={10} lg={5} title='TfL Screensaver'>
+            <div className='form-control mb-4'>
+              <label className='label cursor-pointer'>
+                <span className='label-text'>Enable TfL screensaver</span>
+                <input
+                  id='tflEnabled'
+                  name='tflEnabled'
+                  type='checkbox'
+                  className='toggle toggle-primary'
+                  checked={!!formData.tflEnabled}
+                  onChange={onChange('tflEnabled')}
+                />
+              </label>
+            </div>
+            <div className='form-control mb-4'>
+              <label htmlFor='tflAppId' className='mb-2 block text-sm font-medium'>
+                App ID
+              </label>
+              <input
+                id='tflAppId'
+                name='tflAppId'
+                type='text'
+                className='input input-bordered w-full'
+                placeholder='Your TfL App ID'
+                value={formData.tflAppId}
+                onChange={onChange('tflAppId')}
+                disabled={!formData.tflEnabled}
+              />
+            </div>
+            <div className='form-control mb-4'>
+              <label htmlFor='tflAppKey' className='mb-2 block text-sm font-medium'>
+                App Key
+              </label>
+              <input
+                id='tflAppKey'
+                name='tflAppKey'
+                type='password'
+                className='input input-bordered w-full'
+                placeholder='Your TfL App Key'
+                value={formData.tflAppKey}
+                onChange={onChange('tflAppKey')}
+                disabled={!formData.tflEnabled}
+              />
+            </div>
+            <div className='divider'>Tube</div>
+            <div className='form-control mb-4'>
+              <label htmlFor='tflTubeLines' className='mb-2 block text-sm font-medium'>
+                Tube Lines
+              </label>
+              <div className='mb-2 text-xs opacity-70'>Comma-separated line names</div>
+              <input
+                id='tflTubeLines'
+                name='tflTubeLines'
+                type='text'
+                className='input input-bordered w-full'
+                placeholder='central,victoria,jubilee'
+                value={formData.tflTubeLines}
+                onChange={onChange('tflTubeLines')}
+                disabled={!formData.tflEnabled}
+              />
+            </div>
+            <div className='divider'>Bus</div>
+            <div className='form-control mb-4'>
+              <label htmlFor='tflBusStopId' className='mb-2 block text-sm font-medium'>
+                Bus Stop ID
+              </label>
+              <div className='mb-2 text-xs opacity-70'>NaPTAN code for bus arrivals</div>
+              <input
+                id='tflBusStopId'
+                name='tflBusStopId'
+                type='text'
+                className='input input-bordered w-full'
+                placeholder='490008660N'
+                value={formData.tflBusStopId}
+                onChange={onChange('tflBusStopId')}
+                disabled={!formData.tflEnabled}
+              />
+            </div>
+            <div className='form-control'>
+              <label htmlFor='tflBusRoutes' className='mb-2 block text-sm font-medium'>
+                Bus Routes
+              </label>
+              <div className='mb-2 text-xs opacity-70'>Comma-separated route numbers</div>
+              <input
+                id='tflBusRoutes'
+                name='tflBusRoutes'
+                type='text'
+                className='input input-bordered w-full'
+                placeholder='73,476'
+                value={formData.tflBusRoutes}
+                onChange={onChange('tflBusRoutes')}
+                disabled={!formData.tflEnabled}
+              />
             </div>
           </Card>
 
