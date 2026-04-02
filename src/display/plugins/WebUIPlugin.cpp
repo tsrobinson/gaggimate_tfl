@@ -102,7 +102,7 @@ void WebUIPlugin::loop() {
         doc["cd"] = controller->getSystemInfo().capabilities.dimming;
         doc["tw"] = profileManager->getSelectedProfile().getTotalVolume(); // total target weight for the process
         doc["bta"] = controller->isVolumetricAvailable() ? 1 : 0;
-        doc["bt"] = controller->isVolumetricAvailable() && controller->getSettings().isVolumetricTarget() ? 1 : 0;
+        doc["bt"] = controller->isVolumetricAvailable() && controller->getProfileManager()->getSelectedProfile().isVolumetric() ? 1 : 0;
         doc["btd"] = profileManager->getSelectedProfile().getTotalDuration();
         doc["led"] = controller->getSystemInfo().capabilities.ledControl;
         doc["gtd"] = controller->getTargetGrindDuration();
@@ -428,10 +428,10 @@ void WebUIPlugin::handleProfileRequest(uint32_t clientId, JsonDocument &request)
         profileManager->selectProfile(id);
     } else if (type == "req:profiles:favorite") {
         auto id = request["id"].as<String>();
-        controller->getSettings().addFavoritedProfile(id);
+        profileManager->addFavoritedProfile(id);
     } else if (type == "req:profiles:unfavorite") {
         auto id = request["id"].as<String>();
-        controller->getSettings().removeFavoritedProfile(id);
+        profileManager->removeFavoritedProfile(id);
     } else if (type == "req:profiles:reorder") {
         // Expect an array of profile IDs in desired order
         if (request["order"].is<JsonArray>()) {
@@ -516,6 +516,20 @@ void WebUIPlugin::handleSettings(AsyncWebServerRequest *request) const {
                 settings->setStandbyBrightness(request->arg("standbyBrightness").toInt());
             if (request->hasArg("standbyBrightnessTimeout"))
                 settings->setStandbyBrightnessTimeout(request->arg("standbyBrightnessTimeout").toInt() * 1000);
+            if (request->hasArg("tflEnabled"))
+                settings->setTflScreensaverEnabled(request->arg("tflEnabled").toInt() != 0);
+            if (request->hasArg("tflAppId"))
+                settings->setTflAppId(request->arg("tflAppId"));
+            if (request->hasArg("tflAppKey"))
+                settings->setTflAppKey(request->arg("tflAppKey"));
+            if (request->hasArg("tflTubeLines"))
+                settings->setTflTubeLines(request->arg("tflTubeLines"));
+            if (request->hasArg("tflBusStopId"))
+                settings->setTflBusStopId(request->arg("tflBusStopId"));
+            if (request->hasArg("tflBusRoutes"))
+                settings->setTflBusRoutes(request->arg("tflBusRoutes"));
+            if (request->hasArg("tflStyle"))
+                settings->setTflScreensaverStyle(request->arg("tflStyle").toInt());
             if (request->hasArg("steamPumpPercentage"))
                 settings->setSteamPumpPercentage(request->arg("steamPumpPercentage").toFloat());
             if (request->hasArg("steamPumpCutoff"))
@@ -624,6 +638,13 @@ void WebUIPlugin::handleSettings(AsyncWebServerRequest *request) const {
     doc["mainBrightness"] = settings.getMainBrightness();
     doc["standbyBrightness"] = settings.getStandbyBrightness();
     doc["standbyBrightnessTimeout"] = settings.getStandbyBrightnessTimeout() / 1000;
+    doc["tflEnabled"] = settings.isTflScreensaverEnabled();
+    doc["tflAppId"] = settings.getTflAppId();
+    doc["tflAppKey"] = settings.getTflAppKey();
+    doc["tflTubeLines"] = settings.getTflTubeLines();
+    doc["tflBusStopId"] = settings.getTflBusStopId();
+    doc["tflBusRoutes"] = settings.getTflBusRoutes();
+    doc["tflStyle"] = settings.getTflScreensaverStyle();
     doc["steamPumpPercentage"] = settings.getSteamPumpPercentage();
     doc["steamPumpCutoff"] = settings.getSteamPumpCutoff();
     doc["themeMode"] = settings.getThemeMode();

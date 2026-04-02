@@ -96,6 +96,13 @@ class Settings {
     int getStandbyBrightness() const { return standbyBrightness; }
     int getStandbyBrightnessTimeout() const { return standbyBrightnessTimeout; }
     int getWifiApTimeout() const { return wifiApTimeout; }
+    bool isTflScreensaverEnabled() const { return tflScreensaverEnabled; }
+    String getTflAppId() const { return tflAppId; }
+    String getTflAppKey() const { return tflAppKey; }
+    String getTflTubeLines() const { return tflTubeLines; }
+    String getTflBusStopId() const { return tflBusStopId; }
+    String getTflBusRoutes() const { return tflBusRoutes; }
+    int getTflScreensaverStyle() const { return tflScreensaverStyle; }
     float getSteamPumpPercentage() const { return steamPumpPercentage; }
     float getSteamPumpCutoff() const { return steamPumpCutoff; }
     int getThemeMode() const { return themeMode; }
@@ -154,6 +161,13 @@ class Settings {
     void setStandbyBrightness(int standby_brightness);
     void setStandbyBrightnessTimeout(int standby_brightness_timeout);
     void setWifiApTimeout(int timeout);
+    void setTflScreensaverEnabled(bool enabled);
+    void setTflAppId(const String &appId);
+    void setTflAppKey(const String &appKey);
+    void setTflTubeLines(const String &tubeLines);
+    void setTflBusStopId(const String &busStopId);
+    void setTflBusRoutes(const String &busRoutes);
+    void setTflScreensaverStyle(int style);
     void setSteamPumpPercentage(float steam_pump_percentage);
     void setSteamPumpCutoff(float steam_pump_cutoff);
     void setThemeMode(int theme_mode);
@@ -223,6 +237,13 @@ class Settings {
     int standbyBrightness = 8;
     int standbyBrightnessTimeout = 60000; // 60 seconds default
     int wifiApTimeout = DEFAULT_WIFI_AP_TIMEOUT_MS;
+    bool tflScreensaverEnabled = false;
+    String tflAppId = "";
+    String tflAppKey = "";
+    String tflTubeLines = "";
+    String tflBusStopId = "";
+    String tflBusRoutes = "";
+    int tflScreensaverStyle = 0;
     int themeMode = 0;
 
     // Sunrise settings

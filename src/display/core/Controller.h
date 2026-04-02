@@ -95,6 +95,8 @@ class Controller {
         return static_cast<int>((reversedLevel - settings.getFullTankDistance()) /
                                 static_cast<float>(settings.getEmptyTankDistance() - settings.getFullTankDistance()) * 100.0f);
     };
+
+    void onVolumetricDelete();
     bool isLowWaterLevel() const { return getWaterLevel() < 20; };
 
     SystemInfo getSystemInfo() const { return systemInfo; }

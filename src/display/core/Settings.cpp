@@ -93,6 +93,13 @@ Settings::Settings() {
     standbyBrightness = preferences.getInt("standby_b", 8);
     standbyBrightnessTimeout = preferences.getInt("standby_bt", 60000);
     wifiApTimeout = preferences.getInt("wifi_apt", DEFAULT_WIFI_AP_TIMEOUT_MS);
+    tflScreensaverEnabled = preferences.getBool("tfl_en", false);
+    tflAppId = preferences.getString("tfl_id", "");
+    tflAppKey = preferences.getString("tfl_key", "");
+    tflTubeLines = preferences.getString("tfl_tube", "");
+    tflBusStopId = preferences.getString("tfl_stop", "");
+    tflBusRoutes = preferences.getString("tfl_bus", "");
+    tflScreensaverStyle = preferences.getInt("tfl_style", 0);
     themeMode = preferences.getInt("theme", 0);
 
     // Sunrise settings
@@ -354,6 +361,41 @@ void Settings::setWifiApTimeout(int timeout) {
     save();
 }
 
+void Settings::setTflScreensaverEnabled(bool enabled) {
+    tflScreensaverEnabled = enabled;
+    save();
+}
+
+void Settings::setTflAppId(const String &appId) {
+    tflAppId = appId;
+    save();
+}
+
+void Settings::setTflAppKey(const String &appKey) {
+    tflAppKey = appKey;
+    save();
+}
+
+void Settings::setTflTubeLines(const String &tubeLines) {
+    tflTubeLines = tubeLines;
+    save();
+}
+
+void Settings::setTflBusStopId(const String &busStopId) {
+    tflBusStopId = busStopId;
+    save();
+}
+
+void Settings::setTflBusRoutes(const String &busRoutes) {
+    tflBusRoutes = busRoutes;
+    save();
+}
+
+void Settings::setTflScreensaverStyle(int style) {
+    tflScreensaverStyle = style;
+    save();
+}
+
 void Settings::setSteamPumpPercentage(float steam_pump_percentage) {
     steamPumpPercentage = steam_pump_percentage;
     save();
@@ -491,6 +533,13 @@ void Settings::doSave() {
     preferences.putInt("standby_b", standbyBrightness);
     preferences.putInt("standby_bt", standbyBrightnessTimeout);
     preferences.putInt("wifi_apt", wifiApTimeout);
+    preferences.putBool("tfl_en", tflScreensaverEnabled);
+    preferences.putString("tfl_id", tflAppId);
+    preferences.putString("tfl_key", tflAppKey);
+    preferences.putString("tfl_tube", tflTubeLines);
+    preferences.putString("tfl_stop", tflBusStopId);
+    preferences.putString("tfl_bus", tflBusRoutes);
+    preferences.putInt("tfl_style", tflScreensaverStyle);
     preferences.putInt("theme", themeMode);
 
     // Sunrise Settings
