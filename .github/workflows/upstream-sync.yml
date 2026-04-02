@@ -1,0 +1,141 @@
+name: Upstream Sync
+
+on:
+  schedule:
+    - cron: '0 9 * * 1' # Every Monday at 09:00 UTC
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/jniebuhr/gaggimate.git
+
+      - name: Fetch upstream tags
+        run: git fetch upstream --tags
+
+      - name: Detect new upstream tags
+        id: detect
+        run: |
+          # Get the latest upstream tag (semver sorted)
+          LATEST_TAG=$(git tag -l 'v*' --sort=-version:refname | head -1)
+          echo "latest_tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
+
+          # Check if we've already merged this tag (look for merge commits or a tracking file)
+          LAST_SYNCED=""
+          if [ -f .upstream-synced-tag ]; then
+            LAST_SYNCED=$(cat .upstream-synced-tag)
+          fi
+          echo "last_synced=$LAST_SYNCED" >> "$GITHUB_OUTPUT"
+
+          if [ "$LATEST_TAG" = "$LAST_SYNCED" ]; then
+            echo "needs_sync=false" >> "$GITHUB_OUTPUT"
+            echo "Already synced to $LATEST_TAG"
+          else
+            echo "needs_sync=true" >> "$GITHUB_OUTPUT"
+            echo "New upstream tag: $LATEST_TAG (last synced: ${LAST_SYNCED:-none})"
+          fi
+
+      - name: Attempt merge
+        if: steps.detect.outputs.needs_sync == 'true'
+        id: merge
+        run: |
+          TAG="${{ steps.detect.outputs.latest_tag }}"
+          BRANCH="upstream-sync/$TAG"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$BRANCH"
+
+          if git merge "$TAG" --no-edit -m "merge: upstream $TAG"; then
+            echo "$TAG" > .upstream-synced-tag
+            git add .upstream-synced-tag
+            git commit --amend --no-edit
+            echo "merge_ok=true" >> "$GITHUB_OUTPUT"
+          else
+            # Capture conflict list
+            CONFLICTS=$(git diff --name-only --diff-filter=U)
+            echo "merge_ok=false" >> "$GITHUB_OUTPUT"
+            echo "conflicts<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$CONFLICTS" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+            git merge --abort
+          fi
+
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Push branch and create PR
+        if: steps.merge.outputs.merge_ok == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.detect.outputs.latest_tag }}"
+          BRANCH="${{ steps.merge.outputs.branch }}"
+
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --title "Upstream sync: $TAG" \
+            --body "$(cat <<'BODY'
+          ## Automated upstream sync
+
+          Merges upstream [\`$TAG\`](https://github.com/jniebuhr/gaggimate/releases/tag/$TAG) into this fork.
+
+          **Review checklist:**
+          - [ ] TfL screensaver still renders correctly
+          - [ ] Settings page loads with TfL options
+          - [ ] BLE connection to controller works
+          - [ ] Flash and verify on hardware
+
+          _Created automatically by the upstream-sync workflow._
+          BODY
+          )" \
+            --base master \
+            --head "$BRANCH"
+
+      - name: Create issue for conflicts
+        if: steps.merge.outputs.merge_ok == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.detect.outputs.latest_tag }}"
+          CONFLICTS="${{ steps.merge.outputs.conflicts }}"
+
+          gh issue create \
+            --title "Upstream sync conflict: $TAG" \
+            --body "$(cat <<BODY
+          ## Upstream sync failed — merge conflicts
+
+          Attempted to merge upstream [\`$TAG\`](https://github.com/jniebuhr/gaggimate/releases/tag/$TAG) but hit conflicts.
+
+          **Conflicting files:**
+          \`\`\`
+          $CONFLICTS
+          \`\`\`
+
+          **To resolve manually:**
+          \`\`\`bash
+          git remote add upstream https://github.com/jniebuhr/gaggimate.git
+          git fetch upstream --tags
+          git checkout -b upstream-sync/$TAG
+          git merge $TAG
+          # resolve conflicts, then:
+          echo "$TAG" > .upstream-synced-tag
+          git add -A && git commit
+          \`\`\`
+
+          _Created automatically by the upstream-sync workflow._
+          BODY
+          )" \
+            --label "upstream-sync"
