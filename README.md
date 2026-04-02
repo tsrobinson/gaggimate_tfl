@@ -11,7 +11,7 @@
 
 A fork of [GaggiMate](https://github.com/jniebuhr/gaggimate) that adds a **Transport for London screensaver** to the standby screen. While your machine is idle, the display shows live Tube line statuses and bus arrival times pulled from the TfL API.
 
-<img src="docs/assets/display-mockup.svg" alt="TfL screensaver on the GaggiMate display" width="420" />
+<img src="docs/assets/display-mockup.png" alt="TfL screensaver on the GaggiMate display" width="420" />
 
 > All standard GaggiMate features (temperature control, brew timer, steam mode, profiles, etc.) work exactly as normal. The TfL screensaver only activates on the standby screen when enabled.
 
