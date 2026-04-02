@@ -397,15 +397,15 @@
  *You can use these fonts as default font too and they will be available globally.
  *E.g. #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)*/
 #define LV_FONT_CUSTOM_DECLARE \
-    LV_FONT_DECLARE(rail_alphabet_14) \
-    LV_FONT_DECLARE(rail_alphabet_18) \
-    LV_FONT_DECLARE(rail_alphabet_20) \
-    LV_FONT_DECLARE(rail_alphabet_light_14) \
-    LV_FONT_DECLARE(rail_alphabet_light_16) \
-    LV_FONT_DECLARE(rail_alphabet_light_18) \
-    LV_FONT_DECLARE(rail_alphabet_light_20) \
-    LV_FONT_DECLARE(rail_alphabet_34) \
-    LV_FONT_DECLARE(rail_alphabet_40)
+    LV_FONT_DECLARE(transit_font_14) \
+    LV_FONT_DECLARE(transit_font_18) \
+    LV_FONT_DECLARE(transit_font_20) \
+    LV_FONT_DECLARE(transit_font_light_14) \
+    LV_FONT_DECLARE(transit_font_light_16) \
+    LV_FONT_DECLARE(transit_font_light_18) \
+    LV_FONT_DECLARE(transit_font_light_20) \
+    LV_FONT_DECLARE(transit_font_34) \
+    LV_FONT_DECLARE(transit_font_40)
 
 /*Always set a default font*/
 #define LV_FONT_DEFAULT &lv_font_montserrat_14

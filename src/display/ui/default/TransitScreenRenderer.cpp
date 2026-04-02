@@ -157,32 +157,32 @@ lv_font_t withFallbackCopy(const lv_font_t &font, const lv_font_t &fallback) {
 }
 const lv_font_t *transitHeaderFont(int style) {
     (void)style;
-    static const lv_font_t font = withFallbackCopy(rail_alphabet_light_14, lv_font_montserrat_14);
+    static const lv_font_t font = withFallbackCopy(transit_font_light_14, lv_font_montserrat_14);
     return &font;
 }
 const lv_font_t *transitRowFont(int style) {
     (void)style;
-    static const lv_font_t font = withFallbackCopy(rail_alphabet_20, lv_font_montserrat_20);
+    static const lv_font_t font = withFallbackCopy(transit_font_20, lv_font_montserrat_20);
     return &font;
 }
 const lv_font_t *transitStatusFont(int style) {
     (void)style;
-    static const lv_font_t font = withFallbackCopy(rail_alphabet_20, lv_font_montserrat_20);
+    static const lv_font_t font = withFallbackCopy(transit_font_20, lv_font_montserrat_20);
     return &font;
 }
 const lv_font_t *transitBusDestinationFont(int style) {
     (void)style;
-    static const lv_font_t font = withFallbackCopy(rail_alphabet_light_18, lv_font_montserrat_18);
+    static const lv_font_t font = withFallbackCopy(transit_font_light_18, lv_font_montserrat_18);
     return &font;
 }
 const lv_font_t *transitBusTimeFont(int style) {
     (void)style;
-    static const lv_font_t font = withFallbackCopy(rail_alphabet_light_20, lv_font_montserrat_20);
+    static const lv_font_t font = withFallbackCopy(transit_font_light_20, lv_font_montserrat_20);
     return &font;
 }
 const lv_font_t *transitTimeFont(int style) {
     (void)style;
-    return &rail_alphabet_40;
+    return &transit_font_40;
 }
 void setTransitAnimX(void *object, int32_t value) {
     lv_obj_set_x(static_cast<lv_obj_t *>(object), value);

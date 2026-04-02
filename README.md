@@ -80,6 +80,25 @@ Use the standard TfL line identifiers: `bakerloo`, `central`, `circle`, `distric
 |---|---|
 | Dark background with cream/ivory text, coloured line chips | Black background with amber text, LED departure-board look |
 
+## Fonts
+
+The screensaver ships with [Overpass](https://overpassfont.org/) (OFL/LGPL licensed) as the default typeface. It's a clean, geometric sans-serif with a transport/wayfinding feel that works well on the small display.
+
+### Using a custom font
+
+If you'd prefer a different typeface, you can regenerate the font files from any TTF or OTF. You'll need Node.js installed.
+
+1. Place your bold and light font files somewhere accessible.
+2. Run the conversion script:
+
+```bash
+./scripts/generate_transit_fonts.sh path/to/your-bold.otf path/to/your-light.otf
+```
+
+This generates all 9 LVGL bitmap font files in `src/display/fonts/` at the correct sizes. Then rebuild and flash as normal.
+
+If you only have a single weight, you can pass the same file for both arguments.
+
 ## How it works
 
 - The **TransitScreensaverPlugin** runs on the display and fetches TfL API data every 15 seconds while in standby mode.
